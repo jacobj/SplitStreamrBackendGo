@@ -23,7 +23,13 @@ func main() {
 
 	rh := RestHandler{dbs: dbs}
 
-	wsh := WebSocketHandler{dbs: dbs}
+	var wsh = WebSocketHandler{
+		dbs:         dbs,
+		connections: make(map[*connection]bool),
+		broadcast:   make(chan []byte),
+		register:    make(chan *connection),
+		unregister:  make(chan *connection),
+	}
 
 	http.HandleFunc("/songs/", rh.handleSong)
 	http.HandleFunc("/songs", rh.handleSongs)

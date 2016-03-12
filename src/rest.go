@@ -24,6 +24,7 @@ type RestHandler struct {
 func (rh RestHandler) handleSong(rw http.ResponseWriter, rq *http.Request) {
 	id := rq.URL.String()[len("/songs/"):]
 	if id == "" {
+		// No songId, i.e. bad request.
 		http.Error(rw, "Bad request", 400)
 	}
 	switch rq.Method {
