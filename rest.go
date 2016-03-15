@@ -30,7 +30,11 @@ func (rh RestHandler) handleSong(rw http.ResponseWriter, rq *http.Request) {
 	switch rq.Method {
 	case "GET":
 		result := Song{}
-		rh.dbs.songs().FindId(bson.ObjectIdHex(id)).One(&result)
+		err := rh.dbs.songs().FindId(bson.ObjectIdHex(id)).One(&result)
+
+		if err != nil {
+			http.Error(rw, "Something went wrong!", 500)
+		}
 
 		rw.Header().Set("Content-Type", "application/json; charset=utf-8")
 		song, _ := json.Marshal(result)
